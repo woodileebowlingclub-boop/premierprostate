@@ -452,6 +452,12 @@ td {
   background: #f8fbf8;
 }
 
+.settings-help {
+  color: var(--muted);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
 label {
   display: grid;
   gap: 6px;

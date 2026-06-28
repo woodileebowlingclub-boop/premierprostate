@@ -21,7 +21,7 @@ const defaultState = {
       endpoint: "https://v3.football.api-sports.io/fixtures",
       apiKey: "",
       apiKeyHeader: "x-apisports-key",
-      leagueId: "39",
+      leagueId: "39, 179",
       season: "2026",
       extraHeaders: ""
     },
@@ -251,6 +251,21 @@ function normaliseTeamName(name) {
     "brighton and hove albion": "Brighton & Hove Albion",
     "brighton hove albion": "Brighton & Hove Albion",
     "brighton and hove albion fc": "Brighton & Hove Albion",
+    "hearts": "Heart of Midlothian",
+    "heart of midlothian": "Heart of Midlothian",
+    "heart of midlothian fc": "Heart of Midlothian",
+    "hibs": "Hibernian",
+    "hibernian fc": "Hibernian",
+    "dundee fc": "Dundee",
+    "dundee utd": "Dundee United",
+    "dundee united fc": "Dundee United",
+    "st johnstone fc": "St Johnstone",
+    "saint johnstone": "St Johnstone",
+    "falkirk fc": "Falkirk",
+    "motherwell fc": "Motherwell",
+    "aberdeen fc": "Aberdeen",
+    "celtic fc": "Celtic",
+    "rangers fc": "Rangers",
     "nottingham forest fc": "Nottingham Forest",
     "newcastle": "Newcastle United",
     "newcastle united fc": "Newcastle United",
@@ -611,12 +626,12 @@ async function syncApiResults() {
   els.apiStatus.textContent = "Checking the football API for completed results...";
 
   try {
-    const feed = await fetchFootballFeed(api);
-    const imported = importApiMatches(feed);
+    const feeds = await fetchFootballFeeds(api);
+    const imported = importApiMatches(feeds);
     render();
     els.apiStatus.textContent = imported
-      ? `${imported} completed result${imported === 1 ? "" : "s"} imported and scores updated.`
-      : "No new completed results found.";
+      ? `${imported} completed result${imported === 1 ? "" : "s"} imported from ${feeds.length} league feed${feeds.length === 1 ? "" : "s"} and scores updated.`
+      : `No new completed results found across ${feeds.length} league feed${feeds.length === 1 ? "" : "s"}.`;
   } catch (error) {
     els.apiStatus.textContent = `API update failed: ${error.message}`;
   } finally {
@@ -624,8 +639,18 @@ async function syncApiResults() {
   }
 }
 
-async function fetchFootballFeed(api) {
-  const url = buildApiUrl(api);
+async function fetchFootballFeeds(api) {
+  const leagueIds = parseLeagueIds(api.leagueId);
+  const targets = leagueIds.length ? leagueIds : [""];
+  const feeds = [];
+  for (const leagueId of targets) {
+    feeds.push(await fetchFootballFeed(api, leagueId));
+  }
+  return feeds;
+}
+
+async function fetchFootballFeed(api, leagueId) {
+  const url = buildApiUrl(api, leagueId);
   const headers = {};
   if (api.apiKeyHeader) headers[api.apiKeyHeader] = api.apiKey;
   if (api.extraHeaders) {
@@ -640,15 +665,22 @@ async function fetchFootballFeed(api) {
   return response.json();
 }
 
-function buildApiUrl(api) {
+function buildApiUrl(api, leagueId) {
   const url = new URL(api.endpoint);
-  if (!url.searchParams.has("league") && api.leagueId) url.searchParams.set("league", api.leagueId);
+  if (!url.searchParams.has("league") && leagueId) url.searchParams.set("league", leagueId);
   if (!url.searchParams.has("season") && api.season) url.searchParams.set("season", api.season);
   return url.toString();
 }
 
-function importApiMatches(feed) {
-  const parsed = parseApiMatches(feed);
+function parseLeagueIds(value) {
+  return String(value || "")
+    .split(/[\n,]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function importApiMatches(feeds) {
+  const parsed = (Array.isArray(feeds) ? feeds : [feeds]).flatMap(parseApiMatches);
   const oldRanks = rankMap();
   const existingKeys = new Set(state.matches.map(matchIdentity));
   let imported = 0;
