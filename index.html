@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Premier League Charity Challenge</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary">
+        <div class="brand">
+          <img class="brand-logo" src="assets/premier-league-charity-challenge-logo.png" alt="Premier League Charity Challenge logo">
+          <span>
+            <strong>Premier League</strong>
+            <small>Charity Challenge</small>
+          </span>
+        </div>
+        <nav class="nav-list">
+          <a href="#dashboard" class="active">Dashboard</a>
+          <a href="#tickets">Tickets</a>
+          <a href="#results">Results</a>
+          <a href="#statistics">Statistics</a>
+          <a href="#settings">Settings</a>
+          <a href="#admin">Admin</a>
+        </nav>
+        <div class="charity-note">
+          <strong>£5 ticket split</strong>
+          <span>Two-thirds to charity, one-third to prizes.</span>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="topbar-title">
+            <img class="topbar-logo" src="assets/premier-league-charity-challenge-logo.png" alt="">
+            <div>
+            <h1>Premier League Charity Challenge</h1>
+            <p>Season-long football fundraising for Prostate Cancer.</p>
+            </div>
+          </div>
+          <button class="primary-action" id="donateBtn" type="button">Donate / Pay via JustGiving</button>
+        </header>
+
+        <section id="dashboard" class="section">
+          <div class="section-heading">
+            <h2>Dashboard</h2>
+            <p id="seasonName">Current season</p>
+          </div>
+          <div class="metric-grid" id="metricGrid"></div>
+          <div class="dashboard-grid">
+            <section class="panel wide">
+              <div class="panel-heading">
+                <h3>Current Leaderboard</h3>
+                <span id="leaderboardCount"></span>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Player</th>
+                      <th>Ticket</th>
+                      <th>Teams</th>
+                      <th>Score</th>
+                      <th>Games</th>
+                      <th>Week</th>
+                      <th>Move</th>
+                    </tr>
+                  </thead>
+                  <tbody id="leaderboardBody"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <h3>Prize Fund</h3>
+              </div>
+              <div class="prize-list" id="prizeList"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <h3>Latest Results</h3>
+              </div>
+              <div class="result-list" id="latestResults"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <h3>Top Scoring Teams</h3>
+              </div>
+              <div class="result-list" id="topTeams"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="tickets" class="section">
+          <div class="section-heading">
+            <h2>Ticket Purchase & Management</h2>
+            <p>Players never choose teams. The draw is automatic and rule-checked.</p>
+          </div>
+          <div class="work-grid">
+            <form class="panel form-panel" id="purchaseForm">
+              <div class="panel-heading">
+                <h3>Issue Tickets</h3>
+              </div>
+              <label>Player name
+                <input required name="player" autocomplete="name" placeholder="e.g. Sam Taylor">
+              </label>
+              <label>Number of tickets
+                <input required name="quantity" type="number" min="1" max="100" value="1">
+              </label>
+              <p class="payment-note">Only generate tickets after the £5 per ticket payment has been received.</p>
+              <button class="primary-action" type="submit">Confirm Paid & Generate Tickets</button>
+              <p class="form-message" id="purchaseMessage"></p>
+            </form>
+
+            <section class="panel form-panel">
+              <div class="panel-heading">
+                <h3>Search Tickets</h3>
+              </div>
+              <label>Search player, ticket or team
+                <input id="ticketSearch" placeholder="Start typing...">
+              </label>
+              <button class="secondary-action" id="clearSearch" type="button">Clear Search</button>
+            </section>
+          </div>
+          <section class="panel">
+            <div class="panel-heading">
+              <h3>Ticket Register</h3>
+              <span id="ticketCount"></span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ticket</th>
+                    <th>Player</th>
+                    <th>Teams</th>
+                    <th>Purchased</th>
+                    <th>Score</th>
+                    <th>Games</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ticketBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section id="results" class="section">
+          <div class="section-heading">
+            <h2>Match Results</h2>
+            <p>Only fixtures played after a ticket purchase count for that ticket.</p>
+          </div>
+          <section class="panel api-panel">
+            <div>
+              <div class="panel-heading">
+                <h3>Automatic Score Update</h3>
+              </div>
+              <p id="apiStatus">Connect your football API in Settings, then import completed Premier League results here.</p>
+            </div>
+            <button class="primary-action" id="syncApiBtn" type="button">Auto Update Scores</button>
+          </section>
+          <section class="panel">
+            <div class="panel-heading">
+              <h3>Result History</h3>
+              <span id="matchCount"></span>
+            </div>
+            <div class="result-list tall" id="matchHistory"></div>
+          </section>
+        </section>
+
+        <section id="statistics" class="section">
+          <div class="section-heading">
+            <h2>Statistics</h2>
+            <p>Season performance, fundraising and team trends.</p>
+          </div>
+          <div class="stat-grid" id="statsGrid"></div>
+        </section>
+
+        <section id="settings" class="section">
+          <div class="section-heading">
+            <h2>Settings</h2>
+            <p>Edit seeded pots, scoring rules and payment link before each season.</p>
+          </div>
+          <form class="panel settings-panel" id="settingsForm">
+            <div class="settings-row">
+              <label>Season name
+                <input name="seasonName" id="seasonInput">
+              </label>
+              <label>JustGiving URL
+                <input name="justGivingUrl" id="justGivingInput" placeholder="https://www.justgiving.com/...">
+              </label>
+            </div>
+            <div class="api-settings">
+              <div class="panel-heading">
+                <h3>Football API</h3>
+              </div>
+              <div class="settings-row">
+                <label>API endpoint
+                  <input name="apiEndpoint" id="apiEndpoint" placeholder="https://v3.football.api-sports.io/fixtures">
+                </label>
+                <label>API key
+                  <input name="apiKey" id="apiKey" type="password" autocomplete="off" placeholder="Stored in this browser only">
+                </label>
+              </div>
+              <div class="settings-row scoring-row">
+                <label>API key header
+                  <input name="apiKeyHeader" id="apiKeyHeader" placeholder="x-apisports-key">
+                </label>
+                <label>League ID
+                  <input name="apiLeagueId" id="apiLeagueId" placeholder="39">
+                </label>
+                <label>Season
+                  <input name="apiSeason" id="apiSeason" placeholder="2026">
+                </label>
+              </div>
+              <label>Extra headers JSON
+                <textarea name="apiExtraHeaders" id="apiExtraHeaders" rows="3" placeholder='{"x-rapidapi-host":"v3.football.api-sports.io"}'></textarea>
+              </label>
+            </div>
+            <div class="settings-row scoring-row">
+              <label>Win points
+                <input name="winPoints" type="number" min="0" id="winPoints">
+              </label>
+              <label>Draw points
+                <input name="drawPoints" type="number" min="0" id="drawPoints">
+              </label>
+              <label>Goal points
+                <input name="goalPoints" type="number" min="0" id="goalPoints">
+              </label>
+            </div>
+            <div class="pot-grid">
+              <label>Pot 1
+                <textarea name="pot1" id="pot1" rows="7"></textarea>
+              </label>
+              <label>Pot 2
+                <textarea name="pot2" id="pot2" rows="7"></textarea>
+              </label>
+              <label>Pot 3
+                <textarea name="pot3" id="pot3" rows="7"></textarea>
+              </label>
+              <label>Pot 4
+                <textarea name="pot4" id="pot4" rows="7"></textarea>
+              </label>
+            </div>
+            <button class="primary-action" type="submit">Save Settings</button>
+            <p class="form-message" id="settingsMessage"></p>
+          </form>
+        </section>
+
+        <section id="admin" class="section">
+          <div class="section-heading">
+            <h2>Administration</h2>
+            <p>Export, restore, archive and reset season data.</p>
+          </div>
+          <div class="admin-actions panel">
+            <button class="secondary-action" id="exportBtn" type="button">Export JSON</button>
+            <label class="file-button">Import JSON
+              <input id="importInput" type="file" accept="application/json">
+            </label>
+            <button class="secondary-action" id="backupBtn" type="button">Download Backup</button>
+            <button class="secondary-action" id="archiveBtn" type="button">Archive Completed Season</button>
+            <button class="secondary-action" id="resetScoresBtn" type="button">Reset Scores</button>
+            <button class="danger-action" id="newSeasonBtn" type="button">Start New Season</button>
+          </div>
+          <section class="panel">
+            <div class="panel-heading">
+              <h3>Archived Seasons</h3>
+            </div>
+            <div class="result-list" id="archiveList"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
