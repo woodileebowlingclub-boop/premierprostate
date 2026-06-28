@@ -2,10 +2,10 @@ const STORAGE_KEY = "pl-charity-challenge-state-v1";
 const TICKET_PRICE = 5;
 
 const defaultPots = [
-  ["Liverpool", "Arsenal", "Manchester City", "Chelsea", "Manchester United"],
-  ["Newcastle United", "Aston Villa", "Tottenham Hotspur", "Brighton", "Nottingham Forest"],
-  ["Crystal Palace", "Brentford", "Fulham", "Everton", "Bournemouth"],
-  ["Leeds United", "Sunderland", "Coventry City", "Ipswich Town", "Hull City"]
+  ["Liverpool", "Arsenal", "Manchester City", "Chelsea", "Manchester United", "Celtic", "Rangers"],
+  ["Newcastle United", "Aston Villa", "Tottenham Hotspur", "Brighton & Hove Albion", "Nottingham Forest", "Heart of Midlothian", "Hibernian"],
+  ["Crystal Palace", "Brentford", "Fulham", "Everton", "Bournemouth", "Dundee", "Dundee United", "Aberdeen"],
+  ["Leeds United", "Sunderland", "Coventry City", "Ipswich Town", "Hull City", "St Johnstone", "Falkirk", "Motherwell"]
 ];
 
 const defaultState = {
@@ -247,9 +247,10 @@ function normaliseTeamName(name) {
     "spurs": "Tottenham Hotspur",
     "tottenham": "Tottenham Hotspur",
     "tottenham hotspur fc": "Tottenham Hotspur",
-    "brighton and hove albion": "Brighton",
-    "brighton hove albion": "Brighton",
-    "brighton and hove albion fc": "Brighton",
+    "brighton": "Brighton & Hove Albion",
+    "brighton and hove albion": "Brighton & Hove Albion",
+    "brighton hove albion": "Brighton & Hove Albion",
+    "brighton and hove albion fc": "Brighton & Hove Albion",
     "nottingham forest fc": "Nottingham Forest",
     "newcastle": "Newcastle United",
     "newcastle united fc": "Newcastle United",
@@ -374,8 +375,8 @@ async function handleSettings(event) {
     field.value.split(/\n+/).map((team) => team.trim()).filter(Boolean)
   );
   const teams = pots.flat();
-  if (teams.length !== 20 || new Set(teams).size !== 20) {
-    els.settingsMessage.textContent = "Please enter 20 unique clubs across the four pots.";
+  if (pots.some((pot) => pot.length === 0) || new Set(teams).size !== teams.length) {
+    els.settingsMessage.textContent = "Please enter unique clubs, with at least one club in each pot.";
     return;
   }
   const currentAuth = state.settings.auth || {};

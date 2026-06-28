@@ -2,10 +2,10 @@ const PUBLIC_STORAGE_KEY = "pl-charity-challenge-state-v1";
 const PUBLIC_TICKET_PRICE = 5;
 
 const publicDefaultPots = [
-  ["Liverpool", "Arsenal", "Manchester City", "Chelsea", "Manchester United"],
-  ["Newcastle United", "Aston Villa", "Tottenham Hotspur", "Brighton", "Nottingham Forest"],
-  ["Crystal Palace", "Brentford", "Fulham", "Everton", "Bournemouth"],
-  ["Leeds United", "Sunderland", "Coventry City", "Ipswich Town", "Hull City"]
+  ["Liverpool", "Arsenal", "Manchester City", "Chelsea", "Manchester United", "Celtic", "Rangers"],
+  ["Newcastle United", "Aston Villa", "Tottenham Hotspur", "Brighton & Hove Albion", "Nottingham Forest", "Heart of Midlothian", "Hibernian"],
+  ["Crystal Palace", "Brentford", "Fulham", "Everton", "Bournemouth", "Dundee", "Dundee United", "Aberdeen"],
+  ["Leeds United", "Sunderland", "Coventry City", "Ipswich Town", "Hull City", "St Johnstone", "Falkirk", "Motherwell"]
 ];
 
 let publicState = null;
@@ -72,8 +72,9 @@ function normalisePublicTeamName(name) {
     "man united": "Manchester United",
     "spurs": "Tottenham Hotspur",
     "tottenham": "Tottenham Hotspur",
-    "brighton and hove albion": "Brighton",
-    "brighton hove albion": "Brighton",
+    "brighton": "Brighton & Hove Albion",
+    "brighton and hove albion": "Brighton & Hove Albion",
+    "brighton hove albion": "Brighton & Hove Albion",
     "newcastle": "Newcastle United",
     "leeds": "Leeds United",
     "afc bournemouth": "Bournemouth"
