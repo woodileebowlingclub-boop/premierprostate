@@ -117,8 +117,8 @@ body.auth-locked .auth-overlay {
 }
 
 .brand-logo {
-  width: 54px;
-  height: 54px;
+  width: 76px;
+  height: 76px;
   border-radius: var(--radius);
   background: #ffffff;
   object-fit: contain;
@@ -200,10 +200,13 @@ body.auth-locked .auth-overlay {
 }
 
 .topbar-logo {
-  width: 88px;
-  height: 88px;
+  width: 160px;
+  height: 110px;
   flex: 0 0 auto;
   object-fit: contain;
+  background: #ffffff;
+  border-radius: var(--radius);
+  padding: 6px;
   filter: drop-shadow(0 10px 18px rgba(24, 62, 36, 0.14));
 }
 
@@ -228,6 +231,42 @@ h1 {
 .topbar p {
   color: #3aa7df;
   font-weight: 800;
+}
+
+.dashboard-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 18px;
+}
+
+.dashboard-logo {
+  width: min(420px, 100%);
+  height: auto;
+  display: block;
+  background: #ffffff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 8px;
+}
+
+.competition-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.competition-details span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  background: #e6f5ff;
+  color: #08699d;
+  border: 1px solid #b9e2f8;
+  font-weight: 900;
 }
 
 .section {
@@ -626,8 +665,12 @@ textarea {
   }
 
   .topbar-logo {
-    width: 70px;
-    height: 70px;
+    width: 130px;
+    height: 90px;
+  }
+
+  .dashboard-logo {
+    width: min(260px, 100%);
   }
 
   .nav-list,

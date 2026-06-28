@@ -39,7 +39,7 @@ function normalizePublicState(saved) {
   const settings = saved.settings || {};
   return {
     settings: {
-      seasonName: settings.seasonName || "Premier League Charity Challenge",
+      seasonName: settings.seasonName || "Football Charity Challenge",
       justGivingUrl: settings.justGivingUrl || "",
       scoring: { win: 3, draw: 2, goal: 1, ...(settings.scoring || {}) },
       pots: settings.pots || publicDefaultPots

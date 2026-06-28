@@ -10,7 +10,7 @@ const defaultPots = [
 
 const defaultState = {
   settings: {
-    seasonName: "2026/27 Premier League Charity Challenge",
+    seasonName: "2026/27 Football Charity Challenge",
     justGivingUrl: "",
     auth: {
       adminName: "",
@@ -842,6 +842,7 @@ function deleteMatch(id) {
 function printTicket(id) {
   const ticket = state.tickets.find((item) => item.id === id);
   if (!ticket) return;
+  const logoUrl = new URL("assets/logo.png", window.location.href).href;
   const popup = window.open("", "_blank", "width=720,height=640");
   popup.document.write(`
     <html>
@@ -850,6 +851,7 @@ function printTicket(id) {
         <style>
           body { font-family: Arial, sans-serif; padding: 32px; color: #13251a; }
           .ticket { border: 2px solid #137a3d; border-radius: 8px; padding: 24px; }
+          .print-logo { display: block; width: 260px; max-width: 100%; height: auto; margin: 0 auto 18px; border-radius: 8px; box-shadow: 0 8px 22px rgba(0,0,0,.14); }
           h1 { margin: 0 0 8px; }
           .number { color: #137a3d; font-size: 28px; font-weight: 800; }
           li { margin: 8px 0; }
@@ -857,7 +859,8 @@ function printTicket(id) {
       </head>
       <body>
         <div class="ticket">
-          <h1>Premier League Charity Challenge</h1>
+          <img class="print-logo" src="${logoUrl}" alt="Football Charity Challenge logo">
+          <h1>Football Charity Challenge</h1>
           <p class="number">${ticket.ticketNumber}</p>
           <p><strong>Player:</strong> ${escapeHtml(ticket.player)}</p>
           <p><strong>Purchased:</strong> ${formatDate(ticket.purchasedAt)}</p>
@@ -865,7 +868,7 @@ function printTicket(id) {
           <h2>Teams</h2>
           <ul>${ticket.teams.map((team) => `<li>${escapeHtml(team)}</li>`).join("")}</ul>
           <p><strong>Current score:</strong> ${ticket.score}</p>
-          <p>Thank you for supporting Prostate Cancer fundraising.</p>
+          <p>Thank you for supporting Prostate Cancer.</p>
         </div>
         <script>window.print();<\/script>
       </body>

@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Premier League Charity Challenge</title>
+    <title>Football Charity Challenge</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <div class="auth-overlay" id="authOverlay">
       <form class="auth-card" id="authForm">
-        <img class="auth-logo" src="premier-league-charity-challenge-logo.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/woodileebowlingclub-boop/premierprostate/main/assets/premier-league-charity-challenge-logo.png';" alt="Premier League Charity Challenge logo">
+        <img class="auth-logo" src="assets/logo.png" onerror="this.onerror=null;this.src='logo.png';" alt="Football Charity Challenge logo">
         <h1 id="authTitle">Admin Login</h1>
         <p id="authHelp">Enter the organiser details to manage tickets and scores.</p>
         <label>Admin name
@@ -26,9 +26,9 @@
     <div class="app-shell">
       <aside class="sidebar" aria-label="Primary">
         <div class="brand">
-          <img class="brand-logo" src="premier-league-charity-challenge-logo.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/woodileebowlingclub-boop/premierprostate/main/assets/premier-league-charity-challenge-logo.png';" alt="Premier League Charity Challenge logo">
+          <img class="brand-logo" src="assets/logo.png" onerror="this.onerror=null;this.src='logo.png';" alt="Football Charity Challenge logo">
           <span>
-            <strong>Premier League</strong>
+            <strong>Football</strong>
             <small>Charity Challenge</small>
           </span>
         </div>
@@ -49,10 +49,10 @@
       <main class="main">
         <header class="topbar">
           <div class="topbar-title">
-            <img class="topbar-logo" src="premier-league-charity-challenge-logo.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/woodileebowlingclub-boop/premierprostate/main/assets/premier-league-charity-challenge-logo.png';" alt="">
+            <img class="topbar-logo" src="assets/logo.png" onerror="this.onerror=null;this.src='logo.png';" alt="">
             <div>
-            <h1>Premier League Charity Challenge</h1>
-            <p>Season-long football fundraising for Prostate Cancer.</p>
+            <h1>Football Charity Challenge</h1>
+            <p>Supporting Prostate Cancer</p>
             </div>
           </div>
           <button class="primary-action" id="donateBtn" type="button">Donate / Pay via JustGiving</button>
@@ -63,6 +63,16 @@
         </header>
 
         <section id="dashboard" class="section">
+          <div class="dashboard-logo-wrap">
+            <img class="dashboard-logo" src="assets/logo.png" onerror="this.onerror=null;this.src='logo.png';" alt="Football Charity Challenge logo">
+          </div>
+          <div class="competition-details">
+            <span>£5 Entry</span>
+            <span>Random Football Teams</span>
+            <span>Win Cash Prizes</span>
+            <span>Two-thirds to charity</span>
+            <span>One-third to prize fund</span>
+          </div>
           <div class="section-heading">
             <h2>Dashboard</h2>
             <p id="seasonName">Current season</p>
@@ -182,7 +192,7 @@
               <div class="panel-heading">
                 <h3>Automatic Score Update</h3>
               </div>
-              <p id="apiStatus">Connect your football API in Settings, then import completed Premier League results here.</p>
+              <p id="apiStatus">Connect your football API in Settings, then import completed results here.</p>
             </div>
             <button class="primary-action" id="syncApiBtn" type="button">Auto Update Scores</button>
           </section>
