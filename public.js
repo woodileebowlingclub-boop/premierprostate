@@ -1,5 +1,5 @@
 const PUBLIC_STORAGE_KEY = "pl-charity-challenge-state-v1";
-const PUBLIC_TICKET_PRICE = 5;
+const PUBLIC_TICKET_PRICE = 10;
 
 const publicDefaultPots = [
   ["Liverpool", "Arsenal", "Manchester City", "Chelsea", "Manchester United", "Celtic", "Rangers"],
