@@ -650,3 +650,45 @@ textarea {
     visibility: hidden;
   }
 }
+
+.public-page {
+  background: var(--bg);
+}
+
+.public-shell {
+  width: min(1460px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
+.public-hero {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.public-hero img {
+  width: 112px;
+  height: 112px;
+  object-fit: contain;
+}
+
+.public-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 900px) {
+  .public-hero,
+  .public-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-hero img {
+    width: 90px;
+    height: 90px;
+  }
+}

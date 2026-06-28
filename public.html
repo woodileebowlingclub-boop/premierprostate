@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Premier League Charity Challenge - Public Progress</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="public-page">
+    <main class="public-shell">
+      <header class="public-hero">
+        <img src="premier-league-charity-challenge-logo.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/woodileebowlingclub-boop/premierprostate/main/assets/premier-league-charity-challenge-logo.png';" alt="Premier League Charity Challenge logo">
+        <div>
+          <h1>Premier League Charity Challenge</h1>
+          <p>Public progress board for players, supporters and donors.</p>
+        </div>
+        <a class="primary-action" id="publicDonateBtn" href="#" target="_blank" rel="noopener">Donate via JustGiving</a>
+      </header>
+
+      <section class="section">
+        <div class="section-heading">
+          <h2 id="publicSeasonName">Season progress</h2>
+          <p id="publicUpdated">Live from this browser or latest uploaded data.</p>
+        </div>
+        <div class="metric-grid" id="publicMetricGrid"></div>
+      </section>
+
+      <section class="public-grid section">
+        <section class="panel wide">
+          <div class="panel-heading">
+            <h3>Leaderboard</h3>
+            <span id="publicTicketCount"></span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Player</th>
+                  <th>Ticket</th>
+                  <th>Teams</th>
+                  <th>Score</th>
+                  <th>Games</th>
+                </tr>
+              </thead>
+              <tbody id="publicLeaderboard"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <h3>Prize Fund</h3>
+          </div>
+          <div class="prize-list" id="publicPrizeList"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <h3>Latest Results</h3>
+          </div>
+          <div class="result-list" id="publicResults"></div>
+        </section>
+      </section>
+
+      <section class="panel section">
+        <div class="panel-heading">
+          <h3>Find My Ticket</h3>
+        </div>
+        <label>Search player, ticket or team
+          <input id="publicSearch" placeholder="Start typing...">
+        </label>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ticket</th>
+                <th>Player</th>
+                <th>Teams</th>
+                <th>Score</th>
+                <th>Games</th>
+              </tr>
+            </thead>
+            <tbody id="publicTickets"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="public.js"></script>
+  </body>
+</html>

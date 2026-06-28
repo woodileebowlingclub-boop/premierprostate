@@ -51,7 +51,7 @@ function cacheElements() {
     "topTeams", "purchaseForm", "purchaseMessage", "ticketSearch",
     "clearSearch", "ticketBody", "ticketCount", "matchHistory", "matchCount", "statsGrid", "settingsForm",
     "settingsMessage", "seasonInput", "justGivingInput", "winPoints", "drawPoints",
-    "goalPoints", "pot1", "pot2", "pot3", "pot4", "exportBtn", "importInput",
+    "goalPoints", "pot1", "pot2", "pot3", "pot4", "exportBtn", "exportPublicBtn", "importInput",
     "backupBtn", "archiveBtn", "resetScoresBtn", "newSeasonBtn", "archiveList",
     "donateBtn", "seasonName", "syncApiBtn", "apiStatus", "apiEndpoint", "apiKey",
     "apiKeyHeader", "apiLeagueId", "apiSeason", "apiExtraHeaders", "authOverlay",
@@ -72,6 +72,7 @@ function bindEvents() {
     renderTickets();
   });
   els.exportBtn.addEventListener("click", () => downloadJson(state, "pl-charity-challenge-export.json"));
+  els.exportPublicBtn.addEventListener("click", exportPublicData);
   els.backupBtn.addEventListener("click", () => downloadJson(state, `pl-charity-backup-${todayStamp()}.json`));
   els.importInput.addEventListener("change", handleImport);
   els.archiveBtn.addEventListener("click", archiveSeason);
@@ -935,6 +936,29 @@ function renderArchives() {
 function downloadArchive(id) {
   const archive = state.archives.find((item) => item.id === id);
   if (archive) downloadJson(archive, `${archive.seasonName.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-archive.json`);
+}
+
+function exportPublicData() {
+  const publicData = {
+    settings: {
+      seasonName: state.settings.seasonName,
+      justGivingUrl: state.settings.justGivingUrl,
+      scoring: state.settings.scoring,
+      pots: state.settings.pots
+    },
+    tickets: state.tickets.map(({ id, ticketNumber, player, teams, purchasedAt, score, gamesPlayed, pointsThisWeek }) => ({
+      id,
+      ticketNumber,
+      player,
+      teams,
+      purchasedAt,
+      score,
+      gamesPlayed,
+      pointsThisWeek
+    })),
+    matches: state.matches
+  };
+  downloadJson(publicData, "public-data.json");
 }
 
 function openJustGiving() {
