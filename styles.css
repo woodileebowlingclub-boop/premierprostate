@@ -225,6 +225,11 @@ h1 {
   color: var(--muted);
 }
 
+.topbar p {
+  color: #3aa7df;
+  font-weight: 800;
+}
+
 .section {
   scroll-margin-top: 20px;
   margin-bottom: 32px;
