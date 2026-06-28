@@ -12,6 +12,10 @@ const defaultState = {
   settings: {
     seasonName: "2026/27 Premier League Charity Challenge",
     justGivingUrl: "",
+    auth: {
+      adminName: "",
+      passwordHash: ""
+    },
     scoring: { win: 3, draw: 2, goal: 1 },
     api: {
       endpoint: "https://v3.football.api-sports.io/fixtures",
@@ -50,7 +54,9 @@ function cacheElements() {
     "goalPoints", "pot1", "pot2", "pot3", "pot4", "exportBtn", "importInput",
     "backupBtn", "archiveBtn", "resetScoresBtn", "newSeasonBtn", "archiveList",
     "donateBtn", "seasonName", "syncApiBtn", "apiStatus", "apiEndpoint", "apiKey",
-    "apiKeyHeader", "apiLeagueId", "apiSeason", "apiExtraHeaders"
+    "apiKeyHeader", "apiLeagueId", "apiSeason", "apiExtraHeaders", "authOverlay",
+    "authForm", "authTitle", "authHelp", "authName", "authPassword", "authSubmit",
+    "authMessage", "adminUser", "logoutBtn", "adminNameInput", "adminPasswordInput"
   ].forEach((id) => {
     els[id] = document.getElementById(id);
   });
@@ -73,6 +79,8 @@ function bindEvents() {
   els.newSeasonBtn.addEventListener("click", startNewSeason);
   els.donateBtn.addEventListener("click", openJustGiving);
   els.syncApiBtn.addEventListener("click", syncApiResults);
+  els.authForm.addEventListener("submit", handleAuth);
+  els.logoutBtn.addEventListener("click", logoutAdmin);
 
   document.querySelectorAll(".nav-list a").forEach((link) => {
     link.addEventListener("click", () => {
@@ -107,6 +115,10 @@ function normalizeState(saved) {
         ...defaultState.settings.api,
         ...((saved.settings && saved.settings.api) || {})
       },
+      auth: {
+        ...defaultState.settings.auth,
+        ...((saved.settings && saved.settings.auth) || {})
+      },
       pots: saved.settings?.pots || defaultPots
     },
     tickets: (saved.tickets || []).map((ticket) => ({ ...ticket, paid: true })),
@@ -123,12 +135,85 @@ function saveState() {
 function render() {
   recalculateTickets();
   saveState();
+  renderAuthState();
   renderDashboard();
   renderTickets();
   renderResults();
   renderStats();
   renderArchives();
   els.seasonName.textContent = state.settings.seasonName;
+}
+
+function hasAdminPassword() {
+  return Boolean(state.settings.auth?.passwordHash);
+}
+
+function renderAuthState() {
+  const isAuthenticated = sessionStorage.getItem("plcc-admin-authenticated") === "true";
+  document.body.classList.toggle("auth-locked", !isAuthenticated);
+  els.adminUser.textContent = isAuthenticated
+    ? `Admin: ${state.settings.auth.adminName || "Organiser"}`
+    : "";
+
+  if (!isAuthenticated) {
+    const isSetup = !hasAdminPassword();
+    els.authTitle.textContent = isSetup ? "Create Admin Access" : "Admin Login";
+    els.authHelp.textContent = isSetup
+      ? "Set the organiser name and password for this browser."
+      : "Enter the organiser details to manage tickets and scores.";
+    els.authSubmit.textContent = isSetup ? "Create Admin" : "Unlock App";
+    els.authName.value = state.settings.auth.adminName || "";
+    els.authPassword.value = "";
+  }
+}
+
+async function handleAuth(event) {
+  event.preventDefault();
+  const adminName = els.authName.value.trim();
+  const password = els.authPassword.value;
+  if (!adminName || !password) return;
+
+  if (!hasAdminPassword()) {
+    state.settings.auth.adminName = adminName;
+    state.settings.auth.passwordHash = await hashPassword(password);
+    sessionStorage.setItem("plcc-admin-authenticated", "true");
+    els.authMessage.textContent = "";
+    populateSettings();
+    render();
+    return;
+  }
+
+  const expectedName = state.settings.auth.adminName || "";
+  const matchesName = adminName.toLowerCase() === expectedName.toLowerCase();
+  const matchesPassword = await hashPassword(password) === state.settings.auth.passwordHash;
+  if (!matchesName || !matchesPassword) {
+    els.authMessage.textContent = "Admin name or password is incorrect.";
+    return;
+  }
+
+  sessionStorage.setItem("plcc-admin-authenticated", "true");
+  els.authMessage.textContent = "";
+  render();
+}
+
+function logoutAdmin() {
+  sessionStorage.removeItem("plcc-admin-authenticated");
+  renderAuthState();
+}
+
+async function hashPassword(password) {
+  const value = `plcc:${password}`;
+  if (window.crypto?.subtle) {
+    const bytes = new TextEncoder().encode(value);
+    const digest = await window.crypto.subtle.digest("SHA-256", bytes);
+    return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+  }
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash << 5) - hash + value.charCodeAt(index);
+    hash |= 0;
+  }
+  return `fallback:${hash}`;
 }
 
 function allTeams() {
@@ -282,7 +367,7 @@ function handleMatch(event) {
   render();
 }
 
-function handleSettings(event) {
+async function handleSettings(event) {
   event.preventDefault();
   const pots = [els.pot1, els.pot2, els.pot3, els.pot4].map((field) =>
     field.value.split(/\n+/).map((team) => team.trim()).filter(Boolean)
@@ -292,9 +377,16 @@ function handleSettings(event) {
     els.settingsMessage.textContent = "Please enter 20 unique clubs across the four pots.";
     return;
   }
+  const currentAuth = state.settings.auth || {};
+  const newPassword = els.adminPasswordInput.value;
+  const adminName = els.adminNameInput.value.trim() || currentAuth.adminName || "Organiser";
   state.settings = {
     seasonName: els.seasonInput.value.trim() || defaultState.settings.seasonName,
     justGivingUrl: els.justGivingInput.value.trim(),
+    auth: {
+      adminName,
+      passwordHash: newPassword ? await hashPassword(newPassword) : currentAuth.passwordHash
+    },
     scoring: {
       win: Number(els.winPoints.value),
       draw: Number(els.drawPoints.value),
@@ -310,6 +402,7 @@ function handleSettings(event) {
     },
     pots
   };
+  els.adminPasswordInput.value = "";
   els.settingsMessage.textContent = "Settings saved.";
   populateTeamSelects();
   render();
@@ -318,6 +411,8 @@ function handleSettings(event) {
 function populateSettings() {
   els.seasonInput.value = state.settings.seasonName;
   els.justGivingInput.value = state.settings.justGivingUrl;
+  els.adminNameInput.value = state.settings.auth.adminName || "";
+  els.adminPasswordInput.value = "";
   els.winPoints.value = state.settings.scoring.win;
   els.drawPoints.value = state.settings.scoring.draw;
   els.goalPoints.value = state.settings.scoring.goal;
